@@ -19,6 +19,7 @@
             margin: 40px auto;
             padding: 20px;
         }
+        
         .card {
             border: none;
             border-radius: 12px;
@@ -87,7 +88,7 @@
 
               
                 <form action="${pageContext.request.contextPath}/addAssignmentServlet" method="post">
-                    <input type="hidden" name="courseId" value="${param.courseId}">
+                  
                     <div class="mb-3">
                         <label for="lectureId" class="form-label"> Course Name</label>
                         <select class="form-select" id="lectureId" name="idLecture">
@@ -98,7 +99,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="lectureId" class="form-label">Related Lecture (Optional)</label>
+                        <label for="lectureId" class="form-label"> Lecture (Optional)</label>
                         <select class="form-select" id="lectureId" name="idLecture">
                             <option value="">None</option>
                             <!-- Placeholder for lecture options, to be filled later -->

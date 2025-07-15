@@ -85,8 +85,18 @@
                     <div class="alert alert-success">Lecture added successfully!</div>
                 </c:if>
 
-                <h4>For Course ID: ${param.courseId}</h4>
+              
                 <form action="${pageContext.request.contextPath}/addLecturesServlet" method="post">
+                     <input type="hidden" name="courseId" value="${param.courseId}">
+                    <div class="mb-3">
+                        <label for="lectureTitle" class="form-label">Course</label>                      
+                           <select class="form-select" id="lectureId" name="idLecture">
+                            <option value="">None</option>
+                            <!-- Placeholder for lecture options, to be filled later -->
+                            <option value="1">Sample Lecture 1</option>
+                            <option value="2">Sample Lecture 2</option>
+                        </select>
+                    </div>
                     <input type="hidden" name="courseId" value="${param.courseId}">
                     <div class="mb-3">
                         <label for="lectureTitle" class="form-label">Lecture Title</label>

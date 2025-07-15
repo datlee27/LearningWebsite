@@ -51,7 +51,7 @@
                             </li>
                         <% } else { %>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Courses</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/view/myCourse.jsp">Courses</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Roadmap</a>
