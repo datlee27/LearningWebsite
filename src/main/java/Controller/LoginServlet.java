@@ -79,6 +79,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
                 } else {
                     session.setAttribute("username", user.getUsername());
                     session.setAttribute("role", user.getRole()); 
+                     session.setAttribute("user", user); 
                     dao.logLogin(user.getUsername());
                     // Set login time and historical activity for today
                     session.setAttribute("loginTime", System.currentTimeMillis());
@@ -101,6 +102,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             if (user != null) {
                 session.setAttribute("username", user.getUsername());
                 session.setAttribute("role", user.getRole()); 
+                 session.setAttribute("user", user); 
                 dao.logLogin(user.getUsername());
                 // Set login time and historical activity for today
                 session.setAttribute("loginTime", System.currentTimeMillis());

@@ -32,6 +32,14 @@
         <servlet-name>AddAssignmentServlet</servlet-name>
         <servlet-class>Controller.AddAssignmentServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DeleteControl</servlet-name>
+        <servlet-class>Controller.deleteControl</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditControl</servlet-name>
+        <servlet-class>Controller.EditControl</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>homePage</servlet-name>
         <url-pattern>/homePage</url-pattern>
@@ -59,6 +67,14 @@
     <servlet-mapping>
         <servlet-name>AddAssignmentServlet</servlet-name>
         <url-pattern>/addAssignmentServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteControl</servlet-name>
+        <url-pattern>/deleteControl</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditControl</servlet-name>
+        <url-pattern>/editControl</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

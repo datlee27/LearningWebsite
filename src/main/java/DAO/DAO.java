@@ -345,52 +345,27 @@ public class DAO {
         }
     }
 
-    public int saveLecture(int courseId, String title, String content, String videoUrl) throws SQLException, Exception {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet generatedKeys = null;
-        try {
-            conn = dbContext.getConnection();
-            String sql = "INSERT INTO learning_management.Lectures (course_id, title, content, video_url, status) VALUES (?, ?, ?, ?, 'active');";
-            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, courseId);
-            pstmt.setString(2, title);
-            pstmt.setString(3, content);
-            pstmt.setString(4, videoUrl != null ? videoUrl : "");
-            int affectedRows = pstmt.executeUpdate();
+   public int saveLecture(int courseId, String title, String videoUrl, String status) throws SQLException, Exception {
+    try (Connection conn = dbContext.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(
+                "INSERT INTO learning_management.Lectures (course_id, title, video_url, status) VALUES (?, ?, ?, ?);",
+                Statement.RETURN_GENERATED_KEYS)) {
 
-            if (affectedRows == 0) {
-                throw new SQLException("Creating lecture failed, no rows affected.");
-            }
+        pstmt.setInt(1, courseId);
+        pstmt.setString(2, title);
+        pstmt.setString(3, videoUrl != null ? videoUrl : "");
+        pstmt.setString(4, status);
+        int affectedRows = pstmt.executeUpdate();
 
-            try (ResultSet keys = pstmt.getGeneratedKeys()) {
-                if (keys.next()) {
-                    return keys.getInt(1);
-                } else {
-                    throw new SQLException("Creating lecture failed, no ID obtained.");
-                }
-            }
-        } finally {
-            if (generatedKeys != null) {
-                try {
-                    generatedKeys.close();
-                } catch (SQLException e) {
-                    logger.warning("Failed to close ResultSet: " + e.getMessage());
-                }
-            }
-            if (pstmt != null) {
-                try {
-                    pstmt.close();
-                } catch (SQLException e) {
-                    logger.warning("Failed to close PreparedStatement: " + e.getMessage());
-                }
-            }
-            if (conn != null) {
-                dbContext.closeConnection(conn);
-            }
+        if (affectedRows == 0) throw new SQLException("Creating lecture failed, no rows affected.");
+
+        try (ResultSet keys = pstmt.getGeneratedKeys()) {
+            if (keys.next()) return keys.getInt(1);
+            else throw new SQLException("Creating lecture failed, no ID obtained.");
         }
     }
 
+}
     public int saveAssignment(int courseId, Integer idLecture, String title, String description, String dueDate) throws SQLException, Exception {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -514,5 +489,87 @@ public class DAO {
         user.setRole(rs.getString("role"));
         user.setGoogleId(rs.getString("google_id"));
         return user;
+    }
+    
+    public List<Course> getCoursesByTeacherId(int teacherId) throws SQLException, Exception {
+    List<Course> courses = new ArrayList<>();
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    try {
+        conn = dbContext.getConnection();
+        String sql = "SELECT id, name, description, teacher_id FROM learning_management.Courses WHERE teacher_id = ?";
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, teacherId);
+        rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            Course course = new Course(
+                rs.getString("name"),
+                rs.getString("description"),
+                rs.getInt("teacher_id")
+            );
+            course.setIdCourse(rs.getInt("id"));
+            courses.add(course);
+        }
+
+        return courses;
+
+    } finally {
+        if (rs != null) rs.close();
+        if (pstmt != null) pstmt.close();
+        if (conn != null) dbContext.closeConnection(conn);
+    }
+}
+    
+    public void deleteCourse(int id) throws SQLException, Exception {
+    Connection conn = dbContext.getConnection();
+    String sql = "DELETE FROM learning_management.Courses WHERE id = ?;";
+    PreparedStatement pstmt = conn.prepareStatement(sql);
+    pstmt.setInt(1, id);
+    pstmt.executeUpdate();
+    pstmt.close(); conn.close();
+}
+
+public void updateCourse(int id, String name, String description) throws SQLException, Exception {
+    Connection conn = dbContext.getConnection();
+    String sql = "UPDATE learning_management.Courses SET name = ?, description = ? WHERE id = ?;";
+    PreparedStatement pstmt = conn.prepareStatement(sql);
+    pstmt.setString(1, name);
+    pstmt.setString(2, description);
+    pstmt.setInt(3, id);
+    pstmt.executeUpdate();
+    pstmt.close(); conn.close();
+}
+public List<Lecture> getLecturesByCourseId(int courseId) throws SQLException, Exception {
+        List<Lecture> lectures = new ArrayList<>();
+        logger.info("Attempting to load lectures for courseId: " + courseId);
+        if (courseId <= 0) {
+            logger.warning("Invalid courseId: " + courseId);
+            return lectures; // Trả về danh sách rỗng nếu courseId không hợp lệ
+        }
+
+        try (Connection conn = dbContext.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(
+                     "SELECT id, course_id, title, video_url, status FROM learning_management.Lectures WHERE course_id = ?;");
+             ResultSet rs = pstmt.executeQuery()) {
+
+            pstmt.setInt(1, courseId);
+            while (rs.next()) {
+                Lecture lecture = new Lecture();
+                lecture.setId(rs.getInt("id"));
+                lecture.setIdCourse(rs.getInt("course_id"));
+                lecture.setTitle(rs.getString("title"));
+                lecture.setVideoUrl(rs.getString("video_url"));
+                lecture.setStatus(rs.getString("status"));
+                lectures.add(lecture);
+            }
+            logger.info("Loaded " + lectures.size() + " lectures for courseId: " + courseId);
+        } catch (SQLException e) {
+            logger.severe("Database error in getLecturesByCourseId: " + e.getMessage());
+            throw e;
+        }
+        return lectures;
     }
 }

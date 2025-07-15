@@ -1,7 +1,7 @@
 package Model;
 
 public class Lecture {
-    private int idLecture, idCourse;
+    private int id, idCourse;
     private String title, videoUrl, status;
 
     public Lecture(int idCourse, String title, String videoUrl, String status) {
@@ -11,12 +11,31 @@ public class Lecture {
         this.status = status;
     }
 
+    public Lecture(int id, int idCourse, String title, String videoUrl, String status) {
+        this.id = id;
+        this.idCourse = idCourse;
+        this.title = title;
+        this.videoUrl = videoUrl;
+        this.status = status;
+    }
+
+    public Lecture() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getIdLecture() {
-        return idLecture;
+        return id;
     }
 
     public void setIdLecture(int idLecture) {
-        this.idLecture = idLecture;
+        this.id = idLecture;
     }
 
     public int getIdCourse() {
@@ -54,7 +73,7 @@ public class Lecture {
     @Override
     public String toString() {
         return "Lecture{" +
-               "idLecture=" + idLecture +
+               "idLecture=" + id +
                ", idCourse=" + idCourse +
                ", title=" + title +
                ", videoUrl=" + videoUrl +

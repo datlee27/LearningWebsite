@@ -127,9 +127,7 @@
                         </li>
                         <% String role = (String) session.getAttribute("role"); %>
                         <% if ("teacher".equals(role)) { %>
-                            <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/view/addCourses.jsp">Add Course</a>
-                            </li>
+                            
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/view/courseList.jsp">Course List </a>
                             </li>
@@ -187,7 +185,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Add New Course</h5>
                         <p class="card-text">Create a new course with a title, description, and category to organize your educational content.</p>
-                        <a href="${pageContext.request.contextPath}/view/addCourses.jsp" class="btn btn-custom">Go to Add Course</a>
+                        <a href="${pageContext.request.contextPath}/addCourseServlet" class="btn btn-custom">Go to Add Course</a>
                     </div>
                 </div>
             </div>
@@ -198,7 +196,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Add New Lecture</h5>
                         <p class="card-text">Add a lecture to an existing course, including a title and content URL for engaging lessons.</p>
-                        <a href="${pageContext.request.contextPath}/view/addLectures.jsp" class="btn btn-custom">Go to Add Lecture</a>
+                        <a href="${pageContext.request.contextPath}/addLecturesServlet" class="btn btn-custom">Go to Add Lecture</a>
                     </div>
                 </div>
             </div>
