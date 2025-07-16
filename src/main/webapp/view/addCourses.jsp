@@ -12,6 +12,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <meta charset="UTF-8">
     <title>Add Course</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,7 +22,7 @@
     <jsp:include page="/view/navbar.jsp" />
 <div class="container mt-4">
     <h2>Your Courses</h2>
-    <button class="btn btn-success mb-3" onclick="toggleForm()"><+> Add Course</button>
+    <button class="btn btn-toggle-form" onclick="toggleForm()">Add Course</button>
 
     <!-- Add form -->
     <div id="addCourseForm" class="card p-3 mb-4" style="display: none;">

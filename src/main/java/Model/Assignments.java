@@ -73,6 +73,9 @@ public class Assignments {
     public void setStatus(String status) {
         this.status = status;
     }
+    public java.util.Date getDueDateAsJavaUtilDate() {
+    return new java.util.Date(dueDate.getValue());
+    }
 
     @Override
     public String toString() {

@@ -23,8 +23,8 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="${pageContext.request.contextPath}/homePage">
                     <div class="book-icon-container">
-                        <i class="fas fa-book-open book-icon"></i>
-                        <div class="play-button" onclick="alert('Quay về trang chủ!')">
+                        <i class="fas fa-book-open book-icon" ></i>
+                        <div class="play-button" >
                             <svg viewBox="0 0 24 24">
                                 <path d="M8 5v14l11-7z"/>
                             </svg>
@@ -37,7 +37,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">Home</a>
+                            <a class="nav-link active" href="${pageContext.request.contextPath}/homePage">Home</a>
                         </li>
                         <% String role = (String) session.getAttribute("role"); %>
                         <% if ("teacher".equals(role)) { %>                         
@@ -65,8 +65,8 @@
                     <!-- User Profile, Sign In, Sign Up, Logout, and Theme Toggle -->
                     <div class="d-flex align-items-center">
                         <% if (session.getAttribute("username") == null) { %>
-                            <a href="${pageContext.request.contextPath}/view/signIn.jsp" class="btn btn-outline-primary me-2">Sign In</a>
-                            <a href="${pageContext.request.contextPath}/view/signUp.jsp" class="btn btn-outline-success me-2">Sign Up</a>
+                            <a href="${pageContext.request.contextPath}/loginServlet" class="btn btn-outline-primary me-2">Sign In</a>
+                            <a href="${pageContext.request.contextPath}/register" class="btn btn-outline-success me-2">Sign Up</a>
                         <% } else { %>
                             <div class="user-icon position-relative">
                                 <button class="btn btn-outline-primary me-2" style="border: none; background: none;">

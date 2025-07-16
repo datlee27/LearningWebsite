@@ -1,6 +1,7 @@
 package DAO;
 
 import Model.*;
+import com.google.api.client.util.DateTime;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
@@ -366,13 +367,13 @@ public class DAO {
     }
 
 }
-    public int saveAssignment(int courseId, Integer idLecture, String title, String description, String dueDate) throws SQLException, Exception {
+    public int saveAssignment(int courseId, Integer idLecture, String title, String description, Timestamp dueDate, String status) throws SQLException, Exception {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet generatedKeys = null;
         try {
             conn = dbContext.getConnection();
-            String sql = "INSERT INTO learning_management.Assignments (course_id, id_lecture, title, description, due_date, status) VALUES (?, ?, ?, ?, ?, 'active');";
+            String sql = "INSERT INTO learning_management.Assignments (course_id, lecture_id, title, description, due_date, status) VALUES (?, ?, ?, ?, ?, ?);";
             pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, courseId);
             if (idLecture != null && idLecture > 0) {
@@ -382,7 +383,8 @@ public class DAO {
             }
             pstmt.setString(3, title);
             pstmt.setString(4, description);
-            pstmt.setTimestamp(5, Timestamp.valueOf(dueDate));
+            pstmt.setTimestamp(5, dueDate);
+            pstmt.setString(6, status);
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows == 0) {
@@ -575,4 +577,28 @@ public List<Lecture> getLecturesByCourseId(int courseId) throws SQLException, Ex
 
     return lectures;
 }
+public List<Assignments> getAssignmentsByLecture(int courseId, int lectureId) throws SQLException, Exception {
+    List<Assignments> list = new ArrayList<>();
+    String sql = "SELECT * FROM learning_management.Assignments WHERE course_id = ? AND lecture_id = ?;";
+    try (Connection conn = dbContext.getConnection();
+         PreparedStatement pstmt  = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, courseId);
+        pstmt.setInt(2, lectureId);
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            Assignments a = new Assignments(
+                rs.getInt("course_id"),
+                rs.getInt("lecture_id"),
+                rs.getString("title"),
+                rs.getString("description"),
+                new DateTime(rs.getTimestamp("due_date").getTime()),
+                rs.getString("status")
+            );
+            a.setIdAss(rs.getInt("id"));
+            list.add(a);
+        }
+    }
+    return list;
+}
+
 }
