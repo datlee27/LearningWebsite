@@ -542,13 +542,14 @@ public class DAO {
     pstmt.close(); conn.close();
 }
 
-public void updateCourse(int id, String name, String description) throws SQLException, Exception {
+public void updateCourse(int id, String name, String description,String image ) throws SQLException, Exception {
     Connection conn = dbContext.getConnection();
-    String sql = "UPDATE learning_management.Courses SET name = ?, description = ? WHERE id = ?;";
+    String sql = "UPDATE learning_management.Courses SET name = ?, description = ?,image= ? WHERE id = ?;";
     PreparedStatement pstmt = conn.prepareStatement(sql);
     pstmt.setString(1, name);
     pstmt.setString(2, description);
-    pstmt.setInt(3, id);
+    pstmt.setInt(4, id);
+    pstmt.setString(3, image);
     pstmt.executeUpdate();
     pstmt.close(); conn.close();
 }

@@ -58,15 +58,24 @@
                     <c:forEach var="course" items="${courses}">
                         <div class="col-md-4 mb-4">
                             <div class="card course-card">
-                                <img src="image/${course.image}" class="card-img-top" alt="${course.name}">
+                                <img src="${pageContext.request.contextPath}/${course.image}" 
+                                     class="card-img-top" 
+                                     alt="${course.name}" 
+                                     onerror="this.src='https://via.placeholder.com/300x200';"
+                                     style="width: 100%; height: 200px; object-fit: cover;">
                                 <div class="card-body">
                                     <h5 class="card-title">${course.name}</h5>
                                     <p class="card-text">${course.description}</p>
-                                    <p><strong>Lessons:</strong> ${course.lectures.size()}</p>
+                                    <p class="card-lessons"><strong>Lessons:</strong> ${course.lectures.size()}</p>
                                     <div class="progress progress-container">
                                         <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
                                     </div>
-                                    <a href="course${course.idCourse}.jsp" class="btn btn-primary mt-2">Start Learning</a>
+                                    <c:if test="${not empty sessionScope.username}">
+                                        <a href="course${course.idCourse}.jsp" class="btn btn-primary mt-2">Start Learning</a>
+                                    </c:if>
+                                    <c:if test="${empty sessionScope.username}">
+                                        <a href="${pageContext.request.contextPath}/view/signIn.jsp" class="btn btn-secondary mt-2">Sign In to Start Learning</a>
+                                    </c:if>
                                 </div>
                             </div>
                         </div>

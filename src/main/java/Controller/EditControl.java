@@ -1,94 +1,125 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
 import DAO.DAO;
+import Model.Course;
+import Model.User;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
+import java.util.logging.Logger;
 
-/**
- *
- * @author mac
- */
+@MultipartConfig(maxFileSize = 1024 * 1024 * 5) // Limit file size to 5MB
 public class EditControl extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(EditControl.class.getName());
+    private final DAO dao = new DAO();
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EditControl</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EditControl at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        HttpSession session = request.getSession(false);
+        if (session == null || !"teacher".equals(session.getAttribute("role"))) {
+            response.sendRedirect(request.getContextPath() + "/view/signIn.jsp");
+            return;
+        }
+
+        // Get form parameters
+        int id = Integer.parseInt(request.getParameter("id"));
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+
+        // Handle image upload
+        String imagePath = null;
+        Part filePart = request.getPart("image");
+        if (filePart != null && filePart.getSize() > 0) {
+            String fileName = filePart.getSubmittedFileName();
+            // Use absolute path to the image directory
+            String uploadPath = "/Users/mac/NetBeansProjects/PRJ301/learning_project/src/main/webapp/image/" + fileName;
+            logger.info("Attempting to save image to: " + uploadPath);
+
+            // Ensure the image directory exists
+            File uploadDir = new File(uploadPath).getParentFile();
+            if (!uploadDir.exists()) {
+                logger.info("Creating directory: " + uploadDir.getAbsolutePath());
+                if (!uploadDir.mkdirs()) {
+                    logger.severe("Failed to create directory: " + uploadDir.getAbsolutePath());
+                    request.setAttribute("error", "Failed to create image directory.");
+                    forwardToAddCourses(request, response, session);
+                    return;
+                }
+            }
+
+            // Save the image file
+            try {
+                filePart.write(uploadPath);
+                imagePath = "image/" + fileName; // Relative path for database storage
+                logger.info("Image saved successfully with path: " + imagePath);
+            } catch (IOException e) {
+                logger.severe("Error saving image: " + e.getMessage());
+                request.setAttribute("error", "Failed to save image: " + e.getMessage());
+                forwardToAddCourses(request, response, session);
+                return;
+            }
+        } else {
+            // If no new image is uploaded, retain the existing image (you may need to fetch it from DB)
+            imagePath = request.getParameter("currentImage"); // Add a hidden field in the form for current image
+            if (imagePath == null || imagePath.trim().isEmpty()) {
+                logger.warning("No file part or file size is 0 for image.");
+                request.setAttribute("error", "Image is required.");
+                forwardToAddCourses(request, response, session);
+                return;
+            }
+        }
+
+        try {
+            if (name == null || name.trim().isEmpty() || description == null || description.trim().isEmpty()) {
+                request.setAttribute("error", "Course name and description are required.");
+            } else {
+                dao.updateCourse(id, name, description, imagePath);
+                request.setAttribute("success", "Course updated successfully!");
+            }
+            forwardToAddCourses(request, response, session);
+        } catch (Exception e) {
+            logger.severe("Error updating course: " + e.getMessage());
+            request.setAttribute("error", "Error: " + e.getMessage());
+            forwardToAddCourses(request, response, session);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.getWriter().println("EditControl Servlet is working.");
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    private void forwardToAddCourses(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws ServletException, IOException {
-         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String description = request.getParameter("description");
         try {
-            new DAO().updateCourse(id, name, description);
+            String username = (String) session.getAttribute("username");
+            User user = dao.findByUsername(username);
+            if (user == null) {
+                request.setAttribute("error", "User not found.");
+                request.getRequestDispatcher("/view/addCourses.jsp").forward(request, response);
+                return;
+            }
+            List<Course> courses = dao.getCoursesByTeacherId(user.getId());
+            request.setAttribute("user", user);
+            request.setAttribute("courses", courses);
+            request.getRequestDispatcher("/view/addCourses.jsp").forward(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.warning("Failed to load courses: " + e.getMessage());
+            request.getRequestDispatcher("/view/addCourses.jsp").forward(request, response);
         }
-        response.sendRedirect(request.getContextPath() + "/view/addCourses.jsp");
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Handles course editing with image upload.";
+    }
 }

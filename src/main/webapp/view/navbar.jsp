@@ -36,11 +36,12 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="${pageContext.request.contextPath}/homePage">Home</a>
-                        </li>
+                       
                         <% String role = (String) session.getAttribute("role"); %>
-                        <% if ("teacher".equals(role)) { %>                         
+                        <% if ("teacher".equals(role)) { %>  
+                            <li class="nav-item">
+                            <a class="nav-link active" href="${pageContext.request.contextPath}/homePage">Home</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/view/courseList.jsp">Course List </a>
                             </li>
@@ -50,7 +51,10 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/view/studentList.jsp">Student List</a>
                             </li>
-                        <% } else { %>
+                        <% } else if("student".equals(role)) { %>
+                             <li class="nav-item">
+                            <a class="nav-link active" href="${pageContext.request.contextPath}/homePage">Home</a>
+                            </li> 
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/view/myCourse.jsp">Courses</a>
                             </li>
@@ -74,7 +78,7 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     <a href="${pageContext.request.contextPath}/view/profile.jsp"><i class="bi bi-person-fill me-2"></i>Profile</a>
-                                    <a href="${pageContext.request.contextPath}/view/settings.jsp"><i class="bi bi-gear-fill me-2"></i>Settings</a>
+                                   
                                     <a href="${pageContext.request.contextPath}/view/logOut.jsp"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
                                 </div>
                             </div>
