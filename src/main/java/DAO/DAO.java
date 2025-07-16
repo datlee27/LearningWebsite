@@ -543,19 +543,20 @@ public void updateCourse(int id, String name, String description) throws SQLExce
     pstmt.close(); conn.close();
 }
 public List<Lecture> getLecturesByCourseId(int courseId) throws SQLException, Exception {
-        List<Lecture> lectures = new ArrayList<>();
-        logger.info("Attempting to load lectures for courseId: " + courseId);
-        if (courseId <= 0) {
-            logger.warning("Invalid courseId: " + courseId);
-            return lectures; // Trả về danh sách rỗng nếu courseId không hợp lệ
-        }
+    List<Lecture> lectures = new ArrayList<>();
+    logger.info("Attempting to load lectures for courseId: " + courseId);
+    if (courseId <= 0) {
+        logger.warning("Invalid courseId: " + courseId);
+        return lectures; // Trả về danh sách rỗng nếu courseId không hợp lệ
+    }
 
-        try (Connection conn = dbContext.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(
-                     "SELECT id, course_id, title, video_url, status FROM learning_management.Lectures WHERE course_id = ?;");
-             ResultSet rs = pstmt.executeQuery()) {
+    String sql = "SELECT id, course_id, title, video_url, status FROM learning_management.Lectures WHERE course_id = ?;";
+    
+    try (Connection conn = dbContext.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, courseId);
+        pstmt.setInt(1, courseId); // ✅ phải set trước
+        try (ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
                 Lecture lecture = new Lecture();
                 lecture.setId(rs.getInt("id"));
@@ -565,11 +566,13 @@ public List<Lecture> getLecturesByCourseId(int courseId) throws SQLException, Ex
                 lecture.setStatus(rs.getString("status"));
                 lectures.add(lecture);
             }
-            logger.info("Loaded " + lectures.size() + " lectures for courseId: " + courseId);
-        } catch (SQLException e) {
-            logger.severe("Database error in getLecturesByCourseId: " + e.getMessage());
-            throw e;
         }
-        return lectures;
+        logger.info("Loaded " + lectures.size() + " lectures for courseId: " + courseId);
+    } catch (SQLException e) {
+        logger.severe("Database error in getLecturesByCourseId: " + e.getMessage());
+        throw e;
     }
+
+    return lectures;
+}
 }
