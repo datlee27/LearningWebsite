@@ -82,7 +82,7 @@ h4 {
 }
 
 [data-theme="dark"] .form-label {
-    color: #b0b0b0;
+    color: #cccccc;
 }
 
 .form-control, .form-select {
@@ -179,15 +179,15 @@ textarea.form-control {
 }
 
 .btn-toggle-form {
-    background: linear-gradient(45deg, #6c757d, #868e96);
+    background: linear-gradient(45deg, #cccccc, #868e96);
     border: none;
     color: #fff;
 }
 
 .btn-toggle-form:hover {
-    background: linear-gradient(45deg, #5a6268, #6c757d);
+    background: linear-gradient(45deg, #cccccc, #6c757d);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 21, 94, 0.3);
 }
 
 /* Table Styling */
@@ -333,6 +333,7 @@ textarea.form-control {
 
 [data-theme="dark"] .card {
     background: #333333;
+    color:  #006699;
 }
 
 /* Animations */

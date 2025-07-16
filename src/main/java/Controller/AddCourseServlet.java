@@ -32,12 +32,13 @@ public class AddCourseServlet extends HttpServlet {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         int teacherId = Integer.parseInt(request.getParameter("teacher_id"));
+        String image =request.getParameter("image");
 
         try {
             if (name == null || name.trim().isEmpty() || description == null || description.trim().isEmpty()) {
                 request.setAttribute("error", "Course name and description are required.");
             } else {
-                dao.saveCourse(name, description, teacherId);
+                dao.saveCourse(name, description, teacherId,image);
                 request.setAttribute("success", "Course added successfully!");
             }
 

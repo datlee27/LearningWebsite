@@ -7,15 +7,16 @@ import java.util.List;
 
 public class Course {
     private int idCourse;
-    private String name, description;
+    private String name, description,image;
     private int idTeacher;
     private List<Lecture> lectures;
     private List<Assignments> assignments;
 
-    public Course(String name, String description, int idTeacher) {
+    public Course(String name, String description, int idTeacher, String image) {
         this.name = name;
         this.description = description;
         this.idTeacher = idTeacher;
+        this.image=image;
         this.lectures = new ArrayList<>();
         this.assignments = new ArrayList<>();
     }
@@ -66,6 +67,14 @@ public class Course {
 
     public void setAssignments(List<Assignments> assignments) {
         this.assignments = assignments;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override

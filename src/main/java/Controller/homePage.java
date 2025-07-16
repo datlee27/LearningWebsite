@@ -4,12 +4,15 @@
  */
 package Controller;
 
+import DAO.DAO;
+import Model.Course;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  *
@@ -41,12 +44,20 @@ public class homePage extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+   @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        DAO dao = new DAO(); 
+        try {
+            // Fetch all courses with their lectures
+            List<Course> courses = dao.getCourses();
+            request.setAttribute("courses", courses);
+            request.getRequestDispatcher("/view/homePage.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("error", "Error loading courses: " + e.getMessage());
+            request.getRequestDispatcher("/view/homePage.jsp").forward(request, response);
+        }
     }
-
     /**
      * Handles the HTTP <code>POST</code> method.
      *

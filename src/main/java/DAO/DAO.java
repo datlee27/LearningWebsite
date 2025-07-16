@@ -301,17 +301,18 @@ public class DAO {
         }
     }
 
-    public int saveCourse(String name, String description, int teacherId) throws SQLException, Exception {
+    public int saveCourse(String name, String description, int teacherId,String image) throws SQLException, Exception {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet generatedKeys = null;
         try {
             conn = dbContext.getConnection();
-            String sql = "INSERT INTO learning_management.Courses (name, description, teacher_id) VALUES (?, ?, ?);";
+            String sql = "INSERT INTO learning_management.Courses (name, description, teacher_id,image) VALUES (?, ?, ?,?);";
             pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, name);
             pstmt.setString(2, description);
             pstmt.setInt(3, teacherId);
+            pstmt.setString(4, image);
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows == 0) {
@@ -419,36 +420,42 @@ public class DAO {
         }
     }
 
-    public List<Course> getCourses() throws SQLException, Exception {
+   public List<Course> getCourses() throws SQLException, Exception {
     List<Course> courses = new ArrayList<>();
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
     try {
         conn = dbContext.getConnection();
-        String sql = "SELECT id, name, description, teacher_id FROM learning_management.Courses;";
+        String sql = "SELECT id, name, description, teacher_id,image FROM learning_management.Courses;";
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
         while (rs.next()) {
             Course course = new Course(
                 rs.getString("name"),
                 rs.getString("description"),
-                rs.getInt("teacher_id")
+                rs.getInt("teacher_id"),
+                rs.getString("image")
             );
-            course.setIdCourse(rs.getInt("id"));  // ✅ sửa đúng tên cột
+            course.setIdCourse(rs.getInt("id"));
             courses.add(course);
         }
 
         for (Course course : courses) {
             // Get Lectures
-            sql = "SELECT * FROM learning_management.Lectures WHERE course_id = ?;";
+            sql = "SELECT id, course_id, title, video_url, status FROM learning_management.Lectures WHERE course_id = ?;";
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, course.getIdCourse());
             rs = pstmt.executeQuery();
             List<Lecture> lectures = new ArrayList<>();
             while (rs.next()) {
-                Lecture lecture = new Lecture(course.getIdCourse(), rs.getString("title"), rs.getString("video_url"), rs.getString("status"));
-                lecture.setIdLecture(rs.getInt("idLecture"));
+                Lecture lecture = new Lecture(
+                    course.getIdCourse(),
+                    rs.getString("title"),
+                    rs.getString("video_url"),
+                    rs.getString("status")
+                );
+                lecture.setIdLecture(rs.getInt("id")); // Fixed: Changed idLecture to id
                 lectures.add(lecture);
             }
             course.setLectures(lectures);
@@ -462,13 +469,13 @@ public class DAO {
             while (rs.next()) {
                 Assignments assignment = new Assignments(
                     course.getIdCourse(),
-                    rs.getInt("id_lecture") > 0 ? rs.getInt("id_lecture") : null,
+                    rs.getInt("lecture_id") > 0 ? rs.getInt("lecture_id") : null,
                     rs.getString("title"),
                     rs.getString("description"),
                     new com.google.api.client.util.DateTime(rs.getTimestamp("due_date")),
                     rs.getString("status")
                 );
-                assignment.setIdAss(rs.getInt("idAss"));
+                assignment.setIdAss(rs.getInt("id"));
                 assignments.add(assignment);
             }
             course.setAssignments(assignments);
@@ -501,7 +508,7 @@ public class DAO {
 
     try {
         conn = dbContext.getConnection();
-        String sql = "SELECT id, name, description, teacher_id FROM learning_management.Courses WHERE teacher_id = ?";
+        String sql = "SELECT id, name, description, teacher_id,image FROM learning_management.Courses WHERE teacher_id = ?";
         pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, teacherId);
         rs = pstmt.executeQuery();
@@ -510,7 +517,8 @@ public class DAO {
             Course course = new Course(
                 rs.getString("name"),
                 rs.getString("description"),
-                rs.getInt("teacher_id")
+                rs.getInt("teacher_id"),
+                rs.getString("image")
             );
             course.setIdCourse(rs.getInt("id"));
             courses.add(course);

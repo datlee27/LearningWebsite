@@ -36,6 +36,10 @@
                 <label>Description</label>
                 <textarea class="form-control" name="description" required></textarea>
             </div>
+             <div class="mb-3">
+                <label>Image Course</label>
+                <textarea class="form-control" name="image" required></textarea>
+            </div>
             <button type="submit" class="btn btn-primary">Save</button>
         </form>
     </div>
@@ -44,7 +48,7 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Num</th><th>Name</th><th>Description</th><th>Action</th>
+                <th>Num</th><th>Name</th><th>Description</th><th>Image Course(url)</th><th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -53,6 +57,7 @@
                 <td>${i.index + 1}</td>
                 <td>${c.name}</td>
                 <td>${c.description}</td>
+                <td>${c.image}</td>
                 <td>
                     <button class="btn btn-warning btn-sm" onclick="openEditModal(${c.idCourse}, '${c.name}', '${c.description}')">Edit</button>
                     <form action="${pageContext.request.contextPath}/deleteControl" method="post" style="display:inline;">
