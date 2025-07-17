@@ -1,6 +1,7 @@
 package Controller;
 
-import DAO.DAO;
+import DAO.ActivityDAO;
+import DAO.UserDAO;
 import Model.User;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -24,7 +25,8 @@ import java.util.logging.Logger;
 public class LoginServlet extends HttpServlet {
 
     private static final String GOOGLE_CLIENT_ID = "463263011713-mrrbjqdmf75o6r3lofr88hougr4imc9a.apps.googleusercontent.com";
-    private final DAO dao = new DAO();
+    private final UserDAO userDAO = new UserDAO();
+    private final ActivityDAO activityDAO = new ActivityDAO();
     private final GoogleIdTokenVerifier verifier;
     private final Gson gson = new Gson();
     private static final Logger logger = Logger.getLogger(LoginServlet.class.getName());
@@ -66,7 +68,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             logger.info("Processing Google Sign-In with token: " + googleIdToken);
             String googleId = verifyGoogleToken(googleIdToken);
             if (googleId != null) {
-                user = dao.findByGoogleId(googleId);
+                user = userDAO.findByGoogleId(googleId);
                 if (user == null) {
                     String email = extractEmailFromToken(googleIdToken);
                     String defaultUsername = email != null ? email.split("@")[0] : "google_user_" + googleId;
@@ -80,16 +82,16 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
                     session.setAttribute("username", user.getUsername());
                     session.setAttribute("role", user.getRole()); 
                      session.setAttribute("user", user); 
-                    dao.logLogin(user.getUsername());
+                    activityDAO.logLogin(user.getUsername());
                     // Set login time and historical activity for today
                     session.setAttribute("loginTime", System.currentTimeMillis());
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String today = sdf.format(new java.util.Date());
-                    int historicalMinutes = dao.getTotalActivityForDate(user.getUsername(), today);
+                    int historicalMinutes = activityDAO.getTotalActivityForDate(user.getUsername(), today);
                     session.setAttribute("historicalMinutesToday", historicalMinutes);
                     logger.info("Existing Google user logged in: " + user.getUsername());
                     jsonResponse.put("success", true);
-                    jsonResponse.put("redirect", request.getContextPath() + "/homePage");
+                    jsonResponse.put("redirect", request.getContextPath() + "/home");
                 }
             } else {
                 logger.warning("Invalid Google token received");
@@ -98,20 +100,20 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             }
         } else {
             logger.info("Processing standard login with identifier: " + usernameOrEmail + ", password length: " + (password != null ? password.length() : 0));
-            user = dao.authenticate(usernameOrEmail, password, null);
+            user = userDAO.authenticate(usernameOrEmail, password, null);
             if (user != null) {
                 session.setAttribute("username", user.getUsername());
                 session.setAttribute("role", user.getRole()); 
                  session.setAttribute("user", user); 
-                dao.logLogin(user.getUsername());
+                activityDAO.logLogin(user.getUsername());
                 // Set login time and historical activity for today
                 session.setAttribute("loginTime", System.currentTimeMillis());
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 String today = sdf.format(new java.util.Date());
-                int historicalMinutes = dao.getTotalActivityForDate(user.getUsername(), today);
+                int historicalMinutes = activityDAO.getTotalActivityForDate(user.getUsername(), today);
                 session.setAttribute("historicalMinutesToday", historicalMinutes);
                 logger.info("Standard login successful for user: " + user.getUsername());
-                response.sendRedirect(request.getContextPath() + "/homePage");
+                response.sendRedirect(request.getContextPath() + "/home");
                 return;
             } else {
                 logger.warning("Standard login failed for username/email: " + usernameOrEmail);
@@ -144,7 +146,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         if (session != null && session.getAttribute("username") != null) {
             String username = (String) session.getAttribute("username");
             try {
-                dao.logLogout(username); // Cập nhật thời gian đăng xuất
+                activityDAO.logLogout(username); // Cập nhật thời gian đăng xuất
             } catch (Exception e) {
                 logger.severe("Error logging out: " + e.getMessage());
             }

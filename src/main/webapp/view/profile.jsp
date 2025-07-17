@@ -4,7 +4,7 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
-<%@ page import="DAO.DAO" %>
+<%@ page import="DAO.ActivityDAO" %>
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -43,17 +43,17 @@
                         if (loginTime == null && session.getAttribute("username") != null) {
                             loginTime = System.currentTimeMillis();
                             session.setAttribute("loginTime", loginTime);
-                            new DAO().logLogin((String) session.getAttribute("username"));
+                            new ActivityDAO().logLogin((String) session.getAttribute("username"));
                         }
                         long currentTime = System.currentTimeMillis();
                         long sessionDuration = (loginTime != null) ? (currentTime - loginTime) / (1000 * 60) : 0;
 
                         // Lấy dữ liệu từ DB
-                        DAO dao = new DAO();
+                        ActivityDAO activityDAO = new ActivityDAO();
                         String username = (String) session.getAttribute("username");
                         Map<String, Integer> onlineTimes = new HashMap<>();
                         if (username != null) {
-                            onlineTimes = dao.getUserActivity(username);
+                            onlineTimes = activityDAO.getUserActivity(username);
                             // Cập nhật thời gian online cho ngày hiện tại nếu đang online
                             if (loginTime != null) {
                                 onlineTimes.put(today, historicalMinutesToday + (int) sessionDuration);

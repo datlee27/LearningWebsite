@@ -21,7 +21,7 @@
 <!-- Navigation Menu -->
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="${pageContext.request.contextPath}/homePage">
+                <a class="navbar-brand" href="${pageContext.request.contextPath}/home">
                     <div class="book-icon-container">
                         <i class="fas fa-book-open book-icon" ></i>
                         <div class="play-button" >
@@ -40,7 +40,7 @@
                         <% String role = (String) session.getAttribute("role"); %>
                         <% if ("teacher".equals(role)) { %>  
                             <li class="nav-item">
-                            <a class="nav-link active" href="${pageContext.request.contextPath}/homePage">Home</a>
+                            <a class="nav-link active" href="${pageContext.request.contextPath}/home">Home</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/view/courseList.jsp">Course List </a>
@@ -53,7 +53,7 @@
                             </li>
                         <% } else if("student".equals(role)) { %>
                              <li class="nav-item">
-                            <a class="nav-link active" href="${pageContext.request.contextPath}/homePage">Home</a>
+                            <a class="nav-link active" href="${pageContext.request.contextPath}/home">Home</a>
                             </li> 
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/view/myCourse.jsp">Courses</a>

@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.DAO;
+import DAO.UserDAO;
 import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -8,10 +9,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class UpdateRoleServlet extends HttpServlet {
-    private final DAO dao = new DAO();
+   
+    private final UserDAO userDAO = new UserDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -32,12 +33,12 @@ public class UpdateRoleServlet extends HttpServlet {
             user.setRole(role);
             user.setPassword(""); // Không cần password cho Google login
             try {
-                dao.save(user);
+                userDAO.save(user);
                 session.setAttribute("username", username);
                 session.removeAttribute("tempGoogleId");
                 session.removeAttribute("tempEmail");
                 session.removeAttribute("tempUsername");
-                response.sendRedirect(request.getContextPath() + "/view/homePage.jsp");
+                response.sendRedirect(request.getContextPath() + "/home");
             } catch (Exception e) {
                 System.out.println("Save error: " + e.getMessage()); // Debug
                 request.setAttribute("error", "Failed to save role: " + e.getMessage());

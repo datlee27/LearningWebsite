@@ -1,20 +1,23 @@
 package Controller;
 
-import DAO.DAO;
+
+import DAO.CourseDAO;
+import DAO.LectureDAO;
+import DAO.UserDAO;
 import Model.Course;
 import Model.Lecture;
 import Model.User;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddLecturesServlet extends HttpServlet {
-    private final DAO dao = new DAO();
-
+public class LecturesServlet extends HttpServlet {
+    private final CourseDAO courseDAO = new CourseDAO();
+    private final LectureDAO lectureDAO = new LectureDAO();
+    private final UserDAO userDAO = new UserDAO();
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -43,7 +46,7 @@ public class AddLecturesServlet extends HttpServlet {
             }
 
             // Kiểm tra courseId hợp lệ
-            Course course = dao.getCoursesByTeacherId(user.getId()).stream()
+            Course course = courseDAO.getCoursesByTeacherId(user.getId()).stream()
                     .filter(c -> c.getIdCourse() == courseId)
                     .findFirst()
                     .orElse(null);
@@ -53,7 +56,7 @@ public class AddLecturesServlet extends HttpServlet {
                 return;
             }
 
-            dao.saveLecture(courseId, title, videoUrl, status);
+            lectureDAO.saveLecture(courseId, title, videoUrl, status);
             request.setAttribute("success", true);
             request.setAttribute("courseId", courseId);
             doGet(request, response);
@@ -83,15 +86,15 @@ public class AddLecturesServlet extends HttpServlet {
         }
 
         try {
-            User user = dao.findByUsername(username);
+            User user = userDAO.findByUsername(username);
             if (user == null) {
                 request.setAttribute("error", "User not found");
-                request.getRequestDispatcher("/view/addLectures.jsp").forward(request, response);
+                request.getRequestDispatcher("/view/lectures.jsp").forward(request, response);
                 return;
             }
 
             int teacherId = user.getId();
-            List<Course> courses = dao.getCoursesByTeacherId(teacherId);
+            List<Course> courses = courseDAO.getCoursesByTeacherId(teacherId);
             if (courses == null) {
                 courses = new ArrayList<>();
             }
@@ -105,7 +108,7 @@ public class AddLecturesServlet extends HttpServlet {
                 try {
                     courseId = Integer.parseInt(courseIdParam);
                     if (courseId > 0) { // Kiểm tra courseId hợp lệ
-                        lectures = dao.getLecturesByCourseId(courseId);
+                        lectures = lectureDAO.getLecturesByCourseId(courseId);
                         if (lectures == null) {
                             lectures = new ArrayList<>();
                         }
@@ -121,11 +124,11 @@ public class AddLecturesServlet extends HttpServlet {
 
             request.setAttribute("courseId", courseId);
             request.setAttribute("lectures", lectures);
-            request.getRequestDispatcher("/view/addLectures.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/lectures.jsp").forward(request, response);
 
         } catch (Exception e) {
             request.setAttribute("error", "An error occurred while loading the page: " + e.getMessage());
-            request.getRequestDispatcher("/view/addLectures.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/lectures.jsp").forward(request, response);
         }
     }
 }

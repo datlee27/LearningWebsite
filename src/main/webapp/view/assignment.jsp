@@ -23,7 +23,7 @@
 </c:if>
 
 <!-- Form chọn Course -->
-<form method="get" action="${pageContext.request.contextPath}/addAssignmentServlet">
+<form method="get" action="${pageContext.request.contextPath}/assignments">
     <div class="mb-3">
         <label for="courseDropdown" class="form-label">Choose Course</label>
         <select name="courseId" id="courseDropdown" class="form-select" onchange="this.form.submit()">
@@ -37,7 +37,7 @@
 
 <!-- Form chọn Lecture -->
 <c:if test="${not empty selectedCourseId}">
-<form method="get" action="${pageContext.request.contextPath}/addAssignmentServlet">
+<form method="get" action="${pageContext.request.contextPath}/assignments">
     <input type="hidden" name="courseId" value="${selectedCourseId}" />
     <div class="mb-3">
         <label for="lectureDropdown" class="form-label">Choose Lecture</label>
@@ -57,7 +57,7 @@
 
     <!-- Form Thêm Assignment (ẩn mặc định) -->
     <div id="addAssignmentForm" class="card p-3 mb-4" style="display: none;">
-        <form method="post" action="${pageContext.request.contextPath}/addAssignmentServlet">
+        <form method="post" action="${pageContext.request.contextPath}/assignments">
             <input type="hidden" name="courseId" value="${selectedCourseId}" />
             <input type="hidden" name="lecture_id" value="${selectedLectureId}" />
 

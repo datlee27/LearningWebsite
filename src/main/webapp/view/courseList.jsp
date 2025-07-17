@@ -26,7 +26,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Add New Course</h5>
                         <p class="card-text">Create a new course with a title, description to organize your educational content.</p>
-                        <a href="${pageContext.request.contextPath}/addCourseServlet" class="btn btn-custom">Go to Add Course</a>
+                        <a href="${pageContext.request.contextPath}/courses" class="btn btn-custom">Go to Add Course</a>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Add New Lecture</h5>
                         <p class="card-text">Add a lecture to an existing course, including a title and content URL for engaging lessons.</p>
-                        <a href="${pageContext.request.contextPath}/addLecturesServlet" class="btn btn-custom">Go to Add Lecture</a>
+                        <a href="${pageContext.request.contextPath}/lectures" class="btn btn-custom">Go to Add Lecture</a>
                     </div>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Add New Assignment</h5>
                         <p class="card-text">Create assignments with titles, descriptions, and due dates to assess student progress.</p>
-                        <a href="${pageContext.request.contextPath}/addAssignmentServlet" class="btn btn-custom">Go to Add Assignment</a>
+                        <a href="${pageContext.request.contextPath}/assignments" class="btn btn-custom">Go to Add Assignment</a>
                     </div>
                 </div>
             </div>

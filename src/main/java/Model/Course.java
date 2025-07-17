@@ -1,6 +1,6 @@
 package Model;
 
-import Model.Assignments;
+import Model.Assignment;
 import Model.Lecture;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ public class Course {
     private String name, description,image;
     private int idTeacher;
     private List<Lecture> lectures;
-    private List<Assignments> assignments;
+    private List<Assignment> assignments;
 
     public Course(String name, String description, int idTeacher, String image) {
         this.name = name;
@@ -61,11 +61,11 @@ public class Course {
         this.lectures = lectures;
     }
 
-    public List<Assignments> getAssignments() {
+    public List<Assignment> getAssignments() {
         return assignments;
     }
 
-    public void setAssignments(List<Assignments> assignments) {
+    public void setAssignments(List<Assignment> assignments) {
         this.assignments = assignments;
     }
 

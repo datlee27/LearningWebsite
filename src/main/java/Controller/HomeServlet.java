@@ -4,22 +4,23 @@
  */
 package Controller;
 
-import DAO.DAO;
+
+import DAO.CourseDAO;
+import Model.Course;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-
+import java.util.List;
 
 /**
  *
  * @author mac
  */
-public class deleteControl extends HttpServlet {
-
-    /**
+public class HomeServlet extends HttpServlet {
+private final CourseDAO courseDAO = new CourseDAO();
+    /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
@@ -31,18 +32,7 @@ public class deleteControl extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet deleteControl</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet deleteControl at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        request.getRequestDispatcher("view/homePage.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -54,12 +44,21 @@ public class deleteControl extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
+   @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+    
 
+        try {
+            // Fetch all courses with their lectures
+            List<Course> courses = courseDAO.getCourses();
+            request.setAttribute("courses", courses);
+            request.getRequestDispatcher("/view/homePage.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("error", "Error loading courses: " + e.getMessage());
+            request.getRequestDispatcher("/view/homePage.jsp").forward(request, response);
+        }
+    }
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -71,16 +70,8 @@ public class deleteControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        try {
-            new DAO().deleteCourse(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        response.sendRedirect(request.getContextPath() + "/view/addCourses.jsp");
+        processRequest(request, response);
     }
-
-    
 
     /**
      * Returns a short description of the servlet.

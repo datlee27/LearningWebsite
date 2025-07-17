@@ -1,12 +1,15 @@
 package Controller;
 
-import DAO.DAO;
-import Model.Assignments;
+import DAO.AssignmentDAO;
+import DAO.CourseDAO;
+
+import DAO.LectureDAO;
+import DAO.UserDAO;
+import Model.Assignment;
 import Model.Course;
 import Model.Lecture;
 import Model.User;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,10 +23,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class AddAssignmentServlet extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(AddAssignmentServlet.class.getName());
-    private final DAO dao = new DAO();
-
+public class AssignmentServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(AssignmentServlet.class.getName());
+    private final CourseDAO courseDAO = new CourseDAO();
+    private final LectureDAO lectureDAO = new LectureDAO();
+    private final UserDAO userDAO = new UserDAO();
+    private final AssignmentDAO assignmentDAO = new AssignmentDAO();
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -42,7 +47,7 @@ public class AddAssignmentServlet extends HttpServlet {
         String status = request.getParameter("status");
         if (title == null || title.trim().isEmpty() || description == null || description.trim().isEmpty() || dueDateStr == null) {
             request.setAttribute("error", "Assignment title, description, and due date are required.");
-            request.getRequestDispatcher(request.getContextPath() + "/addAssignmentServlet");
+            request.getRequestDispatcher(request.getContextPath() + "/assignments");
             return;
         }
 
@@ -51,18 +56,18 @@ public class AddAssignmentServlet extends HttpServlet {
             LocalDateTime localDateTime = LocalDateTime.parse(dueDateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
             Timestamp dueDate = Timestamp.valueOf(localDateTime);
 
-            dao.saveAssignment(courseId, idLecture, title, description, dueDate,status);
+           assignmentDAO.saveAssignment(courseId, idLecture, title, description, dueDate,status);
             logger.info("Assignment added successfully for course ID: " + courseId);
             session.setAttribute("success", true);
-          response.sendRedirect(request.getContextPath() + "/addAssignmentServlet");
+          response.sendRedirect(request.getContextPath() + "/assignments");
         } catch (SQLException e) {
             logger.severe("Database error while adding assignment: " + e.getMessage());
             request.setAttribute("error", "Failed to add assignment: " + e.getMessage());
-            request.getRequestDispatcher("/view/addLectures.jsp?courseId=" + courseId).forward(request, response);
+            request.getRequestDispatcher("/view/lectures.jsp?courseId=" + courseId).forward(request, response);
         } catch (Exception e) {
             logger.severe("Unexpected error while adding assignment: " + e.getMessage());
             request.setAttribute("error", "An unexpected error occurred: " + e.getMessage());
-            request.getRequestDispatcher(request.getContextPath() + "/addAssignmentServlet");
+            request.getRequestDispatcher(request.getContextPath() + "/assignments");
         }
     }
 
@@ -82,21 +87,21 @@ public class AddAssignmentServlet extends HttpServlet {
         String lectureIdParam = request.getParameter("lectureId");
 
         try {
-            List<Course> courseList = dao.getCoursesByTeacherId(((User) session.getAttribute("user")).getId());
+            List<Course> courseList = courseDAO.getCoursesByTeacherId(((User) session.getAttribute("user")).getId());
             request.setAttribute("courseList", courseList);
 
             if (courseIdParam != null && !courseIdParam.isEmpty()) {
                 int courseId = Integer.parseInt(courseIdParam);
                 request.setAttribute("selectedCourseId", courseId);
 
-                List<Lecture> lectureList = dao.getLecturesByCourseId(courseId);
+                List<Lecture> lectureList = lectureDAO.getLecturesByCourseId(courseId);
                 request.setAttribute("lectureList", lectureList);
 
                 if (lectureIdParam != null && !lectureIdParam.isEmpty()) {
                     int lectureId = Integer.parseInt(lectureIdParam);
                     request.setAttribute("selectedLectureId", lectureId);
 
-                    List<Assignments> assignmentList = dao.getAssignmentsByLecture(courseId, lectureId);
+                    List<Assignment> assignmentList = assignmentDAO.getAssignmentsByLecture(courseId, lectureId);
                     request.setAttribute("assignmentList", assignmentList);
                 }
             }
@@ -104,6 +109,6 @@ public class AddAssignmentServlet extends HttpServlet {
             request.setAttribute("error", "Error loading data: " + e.getMessage());
         }
 
-        request.getRequestDispatcher("/view/addAssignment.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/assignment.jsp").forward(request, response);
     }
 }

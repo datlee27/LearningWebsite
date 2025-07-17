@@ -1,12 +1,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="DAO.DAO, Model.Course, Model.User, java.util.List" %>
+<%@ page import="DAO.UserDAO,DAO.CourseDAO, Model.Course, Model.User, java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
     String username = (String) session.getAttribute("username");
     String role = (String) session.getAttribute("role");
-    DAO dao = new DAO();
-    User user = dao.findByUsername(username);
-    List<Course> myCourses = dao.getCoursesByTeacherId(user.getId());
+    UserDAO userDAO = new UserDAO();
+    CourseDAO courseDAO = new CourseDAO();
+    User user = userDAO.findByUsername(username);
+    List<Course> myCourses = courseDAO.getCoursesByTeacherId(user.getId());
 %>
 
 <!DOCTYPE html>
@@ -31,7 +32,7 @@
 
     <!-- Add form -->
     <div id="addCourseForm" class="card p-3 mb-4" style="display: none;">
-        <form action="${pageContext.request.contextPath}/addCourseServlet" method="post" enctype="multipart/form-data">
+        <form action="${pageContext.request.contextPath}/courses" method="post" enctype="multipart/form-data">
             <input type="hidden" name="teacher_id" value="<%= user.getId() %>">
             <div class="mb-3">
                 <label>Course Name</label>

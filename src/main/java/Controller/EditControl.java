@@ -1,6 +1,9 @@
 package Controller;
 
-import DAO.DAO;
+import DAO.CourseDAO;
+
+import DAO.LectureDAO;
+import DAO.UserDAO;
 import Model.Course;
 import Model.User;
 import jakarta.servlet.ServletException;
@@ -18,7 +21,9 @@ import java.util.logging.Logger;
 @MultipartConfig(maxFileSize = 1024 * 1024 * 5) // Limit file size to 5MB
 public class EditControl extends HttpServlet {
     private static final Logger logger = Logger.getLogger(EditControl.class.getName());
-    private final DAO dao = new DAO();
+    private final CourseDAO courseDAO = new CourseDAO();
+    private final LectureDAO lectureDAO = new LectureDAO();
+    private final UserDAO userDAO = new UserDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -81,7 +86,7 @@ public class EditControl extends HttpServlet {
             if (name == null || name.trim().isEmpty() || description == null || description.trim().isEmpty()) {
                 request.setAttribute("error", "Course name and description are required.");
             } else {
-                dao.updateCourse(id, name, description, imagePath);
+                courseDAO.updateCourse(id, name, description, imagePath);
                 request.setAttribute("success", "Course updated successfully!");
             }
             forwardToAddCourses(request, response, session);
@@ -102,19 +107,19 @@ public class EditControl extends HttpServlet {
             throws ServletException, IOException {
         try {
             String username = (String) session.getAttribute("username");
-            User user = dao.findByUsername(username);
+            User user = userDAO.findByUsername(username);
             if (user == null) {
                 request.setAttribute("error", "User not found.");
-                request.getRequestDispatcher("/view/addCourses.jsp").forward(request, response);
+                request.getRequestDispatcher("/view/courses.jsp").forward(request, response);
                 return;
             }
-            List<Course> courses = dao.getCoursesByTeacherId(user.getId());
+            List<Course> courses = courseDAO.getCoursesByTeacherId(user.getId());
             request.setAttribute("user", user);
             request.setAttribute("courses", courses);
-            request.getRequestDispatcher("/view/addCourses.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/courses.jsp").forward(request, response);
         } catch (Exception e) {
             logger.warning("Failed to load courses: " + e.getMessage());
-            request.getRequestDispatcher("/view/addCourses.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/courses.jsp").forward(request, response);
         }
     }
 

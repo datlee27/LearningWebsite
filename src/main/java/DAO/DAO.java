@@ -465,9 +465,9 @@ public class DAO {
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, course.getIdCourse());
             rs = pstmt.executeQuery();
-            List<Assignments> assignments = new ArrayList<>();
+            List<Assignment> assignments = new ArrayList<>();
             while (rs.next()) {
-                Assignments assignment = new Assignments(
+                Assignment assignment = new Assignment(
                     course.getIdCourse(),
                     rs.getInt("lecture_id") > 0 ? rs.getInt("lecture_id") : null,
                     rs.getString("title"),
@@ -586,8 +586,8 @@ public List<Lecture> getLecturesByCourseId(int courseId) throws SQLException, Ex
 
     return lectures;
 }
-public List<Assignments> getAssignmentsByLecture(int courseId, int lectureId) throws SQLException, Exception {
-    List<Assignments> list = new ArrayList<>();
+public List<Assignment> getAssignmentsByLecture(int courseId, int lectureId) throws SQLException, Exception {
+    List<Assignment> list = new ArrayList<>();
     String sql = "SELECT * FROM learning_management.Assignments WHERE course_id = ? AND lecture_id = ?;";
     try (Connection conn = dbContext.getConnection();
          PreparedStatement pstmt  = conn.prepareStatement(sql)) {
@@ -595,7 +595,7 @@ public List<Assignments> getAssignmentsByLecture(int courseId, int lectureId) th
         pstmt.setInt(2, lectureId);
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
-            Assignments a = new Assignments(
+            Assignment a = new Assignment(
                 rs.getInt("course_id"),
                 rs.getInt("lecture_id"),
                 rs.getString("title"),

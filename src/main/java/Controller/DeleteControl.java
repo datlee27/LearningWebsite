@@ -4,8 +4,11 @@
  */
 package Controller;
 
-import DAO.DAO;
+import DAO.CourseDAO;
+import DAO.UserDAO;
 import Model.Course;
+import Model.User;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,13 +16,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 /**
  *
  * @author mac
  */
-public class homePage extends HttpServlet {
-
+public class DeleteControl extends HttpServlet {
+private final CourseDAO courseDAO = new CourseDAO();
+private final UserDAO userDAO = new UserDAO();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,7 +39,18 @@ public class homePage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("view/homePage.jsp").forward(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet deleteControl</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet deleteControl at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -44,20 +62,33 @@ public class homePage extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   @Override
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        DAO dao = new DAO(); 
-        try {
-            // Fetch all courses with their lectures
-            List<Course> courses = dao.getCourses();
-            request.setAttribute("courses", courses);
-            request.getRequestDispatcher("/view/homePage.jsp").forward(request, response);
-        } catch (Exception e) {
-            request.setAttribute("error", "Error loading courses: " + e.getMessage());
-            request.getRequestDispatcher("/view/homePage.jsp").forward(request, response);
+       String username = (String) request.getSession().getAttribute("username");
+        if (username == null) {
+            response.sendRedirect("login.jsp");
+            return;
         }
+
+        User user = null;
+    try {
+        user = userDAO.findByUsername(username);
+    } catch (Exception ex) {
+        Logger.getLogger(DeleteControl.class.getName()).log(Level.SEVERE, null, ex);
     }
+        List<Course> myCourses = null;
+    try {
+        myCourses = courseDAO.getCoursesByTeacherId(user.getId());
+    } catch (Exception ex) {
+        Logger.getLogger(DeleteControl.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        request.setAttribute("user", user);
+        request.setAttribute("myCourses", myCourses);
+        request.getRequestDispatcher("/view/courses.jsp").forward(request, response);
+    }
+    
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -69,8 +100,18 @@ public class homePage extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int id = Integer.parseInt(request.getParameter("id"));
+        try {
+            courseDAO.deleteCourse(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       
+       
+        response.sendRedirect(request.getContextPath() + "/view/courses.jsp");
     }
+
+    
 
     /**
      * Returns a short description of the servlet.

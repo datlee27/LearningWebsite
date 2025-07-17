@@ -44,7 +44,7 @@
     </c:if>
 
     <!-- Form chỉ để chọn course -->
-    <form method="get" action="${pageContext.request.contextPath}/addLecturesServlet">
+    <form method="get" action="${pageContext.request.contextPath}/lectures">
         <div class="mb-3">
             <label for="courseId" class="form-label">Select Course:</label>
             <select id="courseId" name="courseId" class="form-select" onchange="submitForm()" required>
@@ -71,7 +71,7 @@
         <button class="btn btn-toggle-form" onclick="toggleForm()">Add Lecture</button>
 
         <!-- Form để thêm lecture -->
-        <form id="lectureForm" class="lecture-form" method="post" action="${pageContext.request.contextPath}/addLecturesServlet">
+        <form id="lectureForm" class="lecture-form" method="post" action="${pageContext.request.contextPath}/lectures">
             <input type="hidden" name="courseId" value="${courseId}">
             <div class="mb-3">
                 <label for="title" class="form-label">Lecture Title:</label>

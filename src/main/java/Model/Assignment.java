@@ -1,15 +1,16 @@
+
 package Model;
 
 import com.google.api.client.util.DateTime;
 
-public class Assignments {
+public class Assignment {
     private int idAss, idCourse;
     private Integer idLecture;
     private String title, description;
     private DateTime dueDate;
     private String status;
 
-    public Assignments(int idCourse, Integer idLecture, String title, String description, DateTime dueDate, String status) {
+    public Assignment(int idCourse, Integer idLecture, String title, String description, DateTime dueDate, String status) {
         this.idCourse = idCourse;
         this.idLecture = idLecture;
         this.title = title;
