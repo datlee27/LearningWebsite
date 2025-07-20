@@ -66,4 +66,50 @@ public class AssignmentDAO {
     }
     return list;
 }
+   public Assignment getAssignmentById(int id) throws SQLException, Exception {
+    String sql = "SELECT * FROM learning_management.Assignments WHERE id = ?";
+    try (Connection conn = dbContext.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, id);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                Assignment a = new Assignment(
+                    rs.getInt("course_id"),
+                    rs.getInt("lecture_id"),
+                    rs.getString("title"),
+                    rs.getString("description"),
+                    new DateTime(rs.getTimestamp("due_date").getTime()),
+                    rs.getString("status")
+                );
+                a.setIdAss(rs.getInt("id"));
+                return a;
+            }
+        }
+    }
+    return null; // or throw exception if not found
+}
+ 
+   public List<Assignment> getAssignmentsByCourseId(int courseId) throws SQLException, Exception {
+    List<Assignment> list = new ArrayList<>();
+    String sql = "SELECT * FROM learning_management.Assignments WHERE course_id = ?;";
+    try (Connection conn = dbContext.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, courseId);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                Assignment a = new Assignment(
+                    rs.getInt("course_id"),
+                    rs.getInt("lecture_id") > 0 ? rs.getInt("lecture_id") : null,
+                    rs.getString("title"),
+                    rs.getString("description"),
+                    new DateTime(rs.getTimestamp("due_date").getTime()),
+                    rs.getString("status")
+                );
+                a.setIdAss(rs.getInt("id"));
+                list.add(a);
+            }
+        }
+    }
+    return list;
+}
 }

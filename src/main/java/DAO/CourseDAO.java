@@ -147,7 +147,7 @@ public class CourseDAO {
     public void updateCourse(int id, String name, String description, String image) throws SQLException, Exception {
         try (Connection conn = dbContext.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(
-                     "UPDATE learning_management.Courses SET name = ?, description = ?, image = ? WHERE id = ?")) {
+                     "UPDATE learning_management.Courses SET name = ?, description = ?, image = ? WHERE id = ?;")) {
             pstmt.setString(1, name);
             pstmt.setString(2, description);
             pstmt.setString(3, image);
@@ -155,4 +155,24 @@ public class CourseDAO {
             pstmt.executeUpdate();
         }
     }
+    public Course getCourseById(int id) throws SQLException, Exception {
+    Course course = null;
+    try (Connection conn = dbContext.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(
+                 "SELECT id, name, description, teacher_id, image FROM learning_management.Courses WHERE id = ?;")) {
+        pstmt.setInt(1, id);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                course = new Course(
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getInt("teacher_id"),
+                        rs.getString("image")
+                );
+                course.setIdCourse(rs.getInt("id"));
+            }
+        }
+    }
+    return course;
+}
 }

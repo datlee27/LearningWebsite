@@ -9,6 +9,8 @@ public class Assignment {
     private String title, description;
     private DateTime dueDate;
     private String status;
+    private String courseName; // New field
+    private String lectureTitle;
 
     public Assignment(int idCourse, Integer idLecture, String title, String description, DateTime dueDate, String status) {
         this.idCourse = idCourse;
@@ -21,6 +23,22 @@ public class Assignment {
 
     public int getIdAss() {
         return idAss;
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public String getLectureTitle() {
+        return lectureTitle;
+    }
+
+    public void setLectureTitle(String lectureTitle) {
+        this.lectureTitle = lectureTitle;
     }
 
     public void setIdAss(int idAss) {

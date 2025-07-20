@@ -112,4 +112,21 @@ public class UserDAO {
         user.setGoogleId(rs.getString("google_id"));
         return user;
     }
+ public User getUserById(int studentId) throws SQLException, Exception {
+    String sql = "SELECT * FROM learning_management.Users WHERE id = ?";
+    try (Connection conn = dbContext.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, studentId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setFirstName(rs.getString("first_name")); // Match database column
+                user.setLastName(rs.getString("last_name"));   // Match database column
+                return user;
+            }
+        }
+    }
+    return null;
+}
 }

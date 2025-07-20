@@ -1,0 +1,230 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : 20 thg 7, 2025, 17:37:21
+    Author     : mac
+*/
+
+/* 
+    Created on : July 20, 2025, 05:35 PM +07
+    Author     : xAI Grok 3
+*/
+
+/* Reset default margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #6699ff 100%);
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    color: #333;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+h4 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+h4::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(to right, #007bff, #00d4ff);
+    border-radius: 2px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.table th {
+    background-color: #f2f2f2;
+    font-weight: 600;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table td {
+    color: #555;
+}
+
+.table a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.table a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.form-control {
+    margin: 5px 0;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100px;
+    display: inline-block;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #007bff, #00d4ff);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(45deg, #0056b3, #00aaff);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.4);
+}
+
+p[style*="color: red"] {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #ffebee;
+    border-radius: 5px;
+    color: #d32f2f;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+    background: linear-gradient(135deg, #333333 0%, #000000 100%);
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .container {
+    background: rgba(30, 30, 30, 0.95);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] h4 {
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .table {
+    background: #2c2c2c;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .table th {
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .table td {
+    color: #b0b0b0;
+}
+
+[data-theme="dark"] .table a {
+    color: #00d4ff;
+}
+
+[data-theme="dark"] .table a:hover {
+    color: #00aaff;
+}
+
+[data-theme="dark"] .form-control {
+    background: #3a3a3a;
+    border-color: #555;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] p[style*="color: red"] {
+    background: #421f1f;
+    color: #ef5350;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    h4 {
+        font-size: 1.5rem;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    .form-control {
+        width: 80px;
+    }
+
+    .btn-primary {
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    h4 {
+        font-size: 1.2rem;
+    }
+
+    .table th,
+    .table td {
+        font-size: 0.85rem;
+    }
+
+    .form-control {
+        width: 60px;
+    }
+
+    .btn-primary {
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+}

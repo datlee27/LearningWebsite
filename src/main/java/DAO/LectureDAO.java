@@ -66,4 +66,23 @@ public class LectureDAO {
         }
         return lectures;
     }
+    public Lecture getLectureById(int id) throws SQLException, Exception {
+    Lecture lecture = null;
+    try (Connection conn = dbContext.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(
+                 "SELECT id, course_id, title, video_url, status FROM learning_management.Lectures WHERE id = ?")) {
+        pstmt.setInt(1, id);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                lecture = new Lecture();
+                lecture.setIdLecture(rs.getInt("id"));
+                lecture.setIdCourse(rs.getInt("course_id"));
+                lecture.setTitle(rs.getString("title"));
+                lecture.setVideoUrl(rs.getString("video_url"));
+                lecture.setStatus(rs.getString("status"));
+            }
+        }
+    }
+    return lecture;
+}
 }

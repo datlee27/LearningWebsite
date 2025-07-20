@@ -11,31 +11,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.Date;
 
-@Entity
-@Table(name = "Submissions")
-public class Submission {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+public class Submission{
     private int id;
 
-    // Replaced primitive ID with a direct object relationship
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignment_id", nullable = false)
     private Assignment assignment;
 
-    // Assumes a User entity exists for students
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", nullable = false)
+    
     private User student;
 
-    @Column(name = "file_url", nullable = false)
+  
     private String fileUrl;
 
-    @Column(name = "submission_date")
+   
     private LocalDateTime submissionDate;
 
-    @Column(name = "grade")
+   
     private Double grade;
 
     public Submission() {
@@ -97,5 +90,11 @@ public class Submission {
 
     public void setGrade(Double grade) {
         this.grade = grade;
+    }
+    public Date getSubmissionDateAsDate() {
+        if (submissionDate != null) {
+            return Date.from(submissionDate.atZone(java.time.ZoneId.systemDefault()).toInstant());
+        }
+        return null;
     }
 }

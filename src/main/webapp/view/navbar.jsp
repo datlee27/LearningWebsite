@@ -46,7 +46,7 @@
                                 <a class="nav-link" href="${pageContext.request.contextPath}/view/courseList.jsp">Course List </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/view/gradeAssignments.jsp">Grade Assignments</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/gradeAssignments">Grade Assignments</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="${pageContext.request.contextPath}/view/studentList.jsp">Student List</a>

@@ -40,6 +40,10 @@
         <servlet-name>EditControl</servlet-name>
         <servlet-class>Controller.EditControl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GradeAssServlet</servlet-name>
+        <servlet-class>Controller.GradeAssServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -75,6 +79,11 @@
     <servlet-mapping>
         <servlet-name>EditControl</servlet-name>
         <url-pattern>/editControl</url-pattern>
+    </servlet-mapping>
+ 
+    <servlet-mapping>
+        <servlet-name>GradeAssServlet</servlet-name>
+        <url-pattern>/gradeAssignments</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
