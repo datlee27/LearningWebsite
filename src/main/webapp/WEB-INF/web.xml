@@ -44,6 +44,10 @@
         <servlet-name>GradeAssServlet</servlet-name>
         <servlet-class>Controller.GradeAssServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StudentListServlet</servlet-name>
+        <servlet-class>Controller.StudentListServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -80,10 +84,13 @@
         <servlet-name>EditControl</servlet-name>
         <url-pattern>/editControl</url-pattern>
     </servlet-mapping>
- 
     <servlet-mapping>
         <servlet-name>GradeAssServlet</servlet-name>
         <url-pattern>/gradeAssignments</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentListServlet</servlet-name>
+        <url-pattern>/studentList</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

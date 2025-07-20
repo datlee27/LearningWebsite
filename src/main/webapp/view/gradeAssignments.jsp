@@ -16,7 +16,7 @@
 </head>
 <body>
     <jsp:include page="/view/navbar.jsp" />
-    
+     <div class="container">
     <c:if test="${not empty error}">
         <p style="color: red;">Error: ${error}</p>
     </c:if>
@@ -64,5 +64,6 @@
             </tbody>
         </table>
     </c:if>
+     </div>
 </body>
 </html>

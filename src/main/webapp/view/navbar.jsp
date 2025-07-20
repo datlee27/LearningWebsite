@@ -49,7 +49,7 @@
                                 <a class="nav-link" href="${pageContext.request.contextPath}/gradeAssignments">Grade Assignments</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/view/studentList.jsp">Student List</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/studentList">Student List</a>
                             </li>
                         <% } else if("student".equals(role)) { %>
                              <li class="nav-item">

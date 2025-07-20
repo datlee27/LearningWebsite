@@ -77,7 +77,7 @@ public class UserDAO {
     public User findByUsername(String username) throws SQLException, Exception {
         try (Connection conn = dbContext.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(
-                     "SELECT id, username, password, email, role, google_id FROM learning_management.Users WHERE username = ?")) {
+                     "SELECT id, username, password, email, role, google_id FROM learning_management.Users WHERE username = ?;")) {
             pstmt.setString(1, username);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -91,7 +91,7 @@ public class UserDAO {
     public User findByGoogleId(String googleId) throws SQLException, Exception {
         try (Connection conn = dbContext.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(
-                     "SELECT id, username, password, email, role, google_id FROM learning_management.Users WHERE google_id = ?")) {
+                     "SELECT id, username, password, email, role, google_id FROM learning_management.Users WHERE google_id = ?;")) {
             pstmt.setString(1, googleId);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {

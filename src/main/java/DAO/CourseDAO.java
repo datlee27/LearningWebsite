@@ -110,7 +110,7 @@ public class CourseDAO {
 
     try {
         conn = dbContext.getConnection();
-        String sql = "SELECT id, name, description, teacher_id,image FROM learning_management.Courses WHERE teacher_id = ?";
+        String sql = "SELECT id, name, description, teacher_id,image FROM learning_management.Courses WHERE teacher_id = ?;";
         pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, teacherId);
         rs = pstmt.executeQuery();

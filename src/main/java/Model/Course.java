@@ -11,6 +11,8 @@ public class Course {
     private int idTeacher;
     private List<Lecture> lectures;
     private List<Assignment> assignments;
+    private List<User> students;
+    private List<Enrollment> enrollments;
 
     public Course(String name, String description, int idTeacher, String image) {
         this.name = name;
@@ -19,6 +21,7 @@ public class Course {
         this.image=image;
         this.lectures = new ArrayList<>();
         this.assignments = new ArrayList<>();
+        this.students = new ArrayList<>();
     }
 
     public int getIdCourse() {
@@ -77,6 +80,23 @@ public class Course {
         this.image = image;
     }
 
+    public List<User> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<User> students) {
+        this.students = students;
+    }
+
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
+
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

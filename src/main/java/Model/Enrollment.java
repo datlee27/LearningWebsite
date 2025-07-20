@@ -10,32 +10,27 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import java.time.format.DateTimeFormatter;
 
-@Entity
-@Table(name = "Enrollments")
+
 public class Enrollment {
 
     @EmbeddedId
     private EnrollmentId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("studentId") // Maps studentId from EnrollmentId
-    @JoinColumn(name = "student_id")
+   
     private User student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("courseId") // Maps courseId from EnrollmentId
-    @JoinColumn(name = "course_id")
+
     private Course course;
 
-    @Column(name = "enrollment_date")
     private LocalDateTime enrollmentDate;
 
-    @Column(name = "status")
+
     private String status;
 
     // Constructors, Getters, and Setters
-    public Enrollment() {
+    public Enrollment() { 
     }
 
     public Enrollment(User student, Course course, LocalDateTime enrollmentDate, String status) {
@@ -76,5 +71,9 @@ public class Enrollment {
     public void setStatus(String status) {
         this.status = status;
     }
+    public String getFormattedEnrollmentDate() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    return this.enrollmentDate.format(formatter);
+}
 
 }
