@@ -48,6 +48,10 @@
         <servlet-name>StudentListServlet</servlet-name>
         <servlet-class>Controller.StudentListServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CourseListServlet</servlet-name>
+        <servlet-class>Controller.CourseListServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -91,6 +95,10 @@
     <servlet-mapping>
         <servlet-name>StudentListServlet</servlet-name>
         <url-pattern>/studentList</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CourseListServlet</servlet-name>
+        <url-pattern>/courseList</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

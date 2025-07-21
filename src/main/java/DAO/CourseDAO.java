@@ -175,4 +175,8 @@ public class CourseDAO {
     }
     return course;
 }
+
+    public List<Course> getAllCourses() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

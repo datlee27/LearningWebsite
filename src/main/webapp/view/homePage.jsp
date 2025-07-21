@@ -21,8 +21,11 @@
     <jsp:include page="/view/navbar.jsp" />
 
     <!-- Main Content -->
-    <div class="container mt-4">
+    <div class="container mt-2">
         <div class="row">
+            
+            <% String role = (String) session.getAttribute("role"); %>
+             <% if ("student".equals(role)) { %>  
             <!-- Sidebar with Learning Roadmap -->
             <div class="col-md-3">
                 <div class="sidebar card p-3">
@@ -47,6 +50,7 @@
                     <a href="roadmap.jsp" class="btn btn-primary mt-3">View Full Roadmap</a>
                 </div>
             </div>
+            <% } %>  
 
             <!-- Course Section -->
             <div class="col-md-9">
@@ -67,9 +71,7 @@
                                     <h5 class="card-title">${course.name}</h5>
                                     <p class="card-text">${course.description}</p>
                                     <p class="card-lessons"><strong>Lessons:</strong> ${course.lectures.size()}</p>
-                                    <div class="progress progress-container">
-                                        <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
-                                    </div>
+                                   
                                     <c:if test="${not empty sessionScope.username}">
                                         <a href="course${course.idCourse}.jsp" class="btn btn-primary mt-2">Start Learning</a>
                                     </c:if>

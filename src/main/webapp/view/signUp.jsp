@@ -11,7 +11,7 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/homePage.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/signUp.css"/>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
    
@@ -61,7 +61,7 @@
                     </form>
                     <!-- Google Sign-In Button -->
                    
-                    <p class="text-center">Already have an account? <a href="${pageContext.request.contextPath}/view/signIn.jsp">Sign In</a></p>
+                    <p class="text-center">Already have an account? <a href="${pageContext.request.contextPath}/loginServlet">Sign In</a></p>
                 </div>
             </div>
         </div>
