@@ -6,7 +6,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Grade Assignments</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gradeAssignments.css" />
+     <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Font Awesome for Book Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gradeAssignment.css" />
     <style>
         .table { width: 100%; border-collapse: collapse; }
         .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
@@ -15,7 +21,9 @@
     </style>
 </head>
 <body>
+    
     <jsp:include page="/view/navbar.jsp" />
+    
      <div class="container">
     <c:if test="${not empty error}">
         <p style="color: red;">Error: ${error}</p>
@@ -65,5 +73,7 @@
         </table>
     </c:if>
      </div>
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

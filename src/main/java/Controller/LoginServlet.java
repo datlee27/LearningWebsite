@@ -36,7 +36,11 @@ public class LoginServlet extends HttpServlet {
                 .setAudience(Collections.singletonList(GOOGLE_CLIENT_ID))
                 .build();
     }
-
+        protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.getRequestDispatcher("view/signIn.jsp").forward(request, response);
+    }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -166,7 +170,7 @@ public class LoginServlet extends HttpServlet {
             }
             session.invalidate();
         }
-        response.sendRedirect(request.getContextPath() + "/view/signIn.jsp");
+       request.getRequestDispatcher("/view/signIn.jsp").forward(request, response);
     }
 
     private String verifyGoogleToken(String idTokenString) throws Exception {

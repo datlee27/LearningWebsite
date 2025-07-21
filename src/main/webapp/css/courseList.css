@@ -167,6 +167,10 @@ body {
     background: linear-gradient(135deg, #333333 0%, #000000 100%);
     color: #e0e0e0;
 }
+[data-theme="dark"] body {
+    background: linear-gradient(135deg, #333333 0%, #000000 100%);
+    color: #e0e0e0;
+}
 
 [data-theme="dark"] .container {
     background: rgba(30, 30, 30, 0.95);
